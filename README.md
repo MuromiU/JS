@@ -1,5 +1,6 @@
 ## languages.js
 **for Html Localization**
+
 examples/languages.html
 ``` html
 <html>

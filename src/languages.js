@@ -1,5 +1,5 @@
 /*
- *
+ * GPLv3.0 2016 chendianbuji@gmail.com
  */
 
 (function (factory) {
