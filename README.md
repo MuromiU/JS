@@ -32,3 +32,5 @@ to choose a language.
 Languages.update();
 ```
 you could also new a MutationObserver to help to do update.
+
+PS: You **don't need to** excute `Languages.update()` after **any** `Languages.select(lang)`, `Languages.update()` is designed to maintain the <key,value> data stored in closure when [lang]:not(title) doms increase or decrease.
