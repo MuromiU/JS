@@ -1,3 +1,7 @@
+## compressed js file
+`*.js` in [/src](https://github.com/MuromiU/JS/tree/master/src)
+`*.min.js` in [/build](https://github.com/MuromiU/JS/tree/master/build)
+
 ## languages.js
 **for Html Localization**
 
