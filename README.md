@@ -6,7 +6,7 @@
 ## languages.js
 **for Html Localization**
 
-examples/languages.html
+[/examples/languages.html](https://github.com/MuromiU/JS/blob/master/examples/languages.html)
 ``` html
 <html>
   <head>
