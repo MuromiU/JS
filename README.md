@@ -32,10 +32,8 @@ Languages.select(lang);
 ```
 to choose a language.
 
-2.After html dom changed, please excute
+2.After html dom changed,
 ``` JavaScript
 Languages.update();
 ```
-you could also new a MutationObserver to help to do update.
-
-PS: You **don't need to** excute `Languages.update()` after **any** `Languages.select(lang)`, `Languages.update()` is designed to maintain the `<key,value>` data stored in closure when [lang]:not(title) doms increase or decrease.
+will be auto excuted

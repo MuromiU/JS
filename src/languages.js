@@ -2,33 +2,53 @@
 
 (function (factory) {
   window.Languages = factory();
+  new MutationObserver(
+    function (mutations)
+    {
+      mutations.map(
+        function (mutation)
+        {
+          if (mutation.target != '[object HTMLBodyElement]' &&
+              mutation.target != '[object HTMLScriptElement]' &&
+              (mutation.removedNodes.length != 0 ||
+              mutation.addedNodes.length != 0)) {
+            Languages.update();
+          }
+        }
+      );
+    }
+  ).observe(
+    document.querySelector('body'),
+    {attributes: false, childList: true, characterData: false, subtree:true}
+  );
 }(function () {
   let multi_languages = new Multi_languages(); // capture on top
 
   function Multi_languages()
   // Let over Lambda over Let over Lambda
   {
-    let elements = new Array();
-    elements["value"] = new Array();
+    let elements = new Map();
     let titles;
+    let active_lang;
+    let element_doms;
     return {
-      init:function init()
+      init: function init()
       {
-        elements["key"] = document.querySelectorAll('[lang]:not(title)');
+        element_doms = document.querySelectorAll('[lang]:not(title)');
         titles = document.querySelectorAll('title[lang]');
         return function (lang)
         {
-          elements["key"].forEach(
-            function (element, index)
+          element_doms.forEach(
+            function (element, _index)
             {
-              if (elements["value"][index] == undefined) {
-                elements["value"][index] = element.style.display;
+              if (!elements.has(element)) {
+                elements.set(element, element.style.display);
               }
               if (element.lang != lang) {
                 element.style.display = 'none';
               } else {
-                element.style.display = elements["value"][index];
-                delete elements["value"][index];
+                element.style.display = elements.get(element);
+                elements.delete(element);
               }
             });
           titles_container = titles[0].parentNode; // <title>s are special
@@ -42,21 +62,43 @@
             }
           );
           titles = document.querySelectorAll('title[lang]');
+          active_lang = lang;
         };
       },
-      update:function ()
+      update: function ()
       {
         return function ()
         {
-          elements["key"].forEach(
-            function (element, index)
+          let increase_doms = element_doms = document.querySelectorAll('[lang]:not(title)');
+          increase_doms.forEach(
+            function (element, _index)
             {
-              if (elements["value"][index] != undefined) {
-                element.style.display = elements["value"][index];// recover all
+              if (!elements.has(element)) {
+                elements.set(element, element.style.display);
               }
-            });
-          elements["key"] = document.querySelectorAll('[lang]:not(title)');
-          elements["value"] = new Array();
+              if (element.lang != active_lang) {
+                element.style.display = 'none';
+              } else {
+                elements.delete(element);
+              }
+            }
+          );
+          let decrease = new Map(elements);
+          increase_doms.forEach(
+            function (element, _index)
+            {
+              if (decrease.has(element)) {
+                decrease.delete(element);
+              }
+            }
+          );
+          decrease.forEach(
+            function (element, _display) {
+              if (elements.has(element)) {
+                elements.delete(element);
+              }
+            }
+          );
         };
       }
     };
