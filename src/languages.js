@@ -23,7 +23,9 @@
   );
 }(function () {
   let multi_languages = new Multi_languages(); // capture on top
-  let pad = Array.prototype.slice.call;
+  let pad = function(x) {
+    return Array.prototype.slice.call(x);
+  }
   function Multi_languages()
   // Let over Lambda over Let over Lambda
   {
