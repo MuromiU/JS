@@ -23,7 +23,7 @@
   );
 }(function () {
   let multi_languages = new Multi_languages(); // capture on top
-
+  let pad = Array.prototype.slice.call;
   function Multi_languages()
   // Let over Lambda over Let over Lambda
   {
@@ -38,7 +38,7 @@
         titles = document.querySelectorAll('title[lang]');
         return function (lang)
         {
-          element_doms.forEach(
+          pad(element_doms).forEach(
             function (element, _index)
             {
               if (!elements.has(element)) {
@@ -52,7 +52,7 @@
               }
             });
           titles_container = titles[0].parentNode; // <title>s are special
-          titles.forEach(
+          pad(titles).forEach(
             function (element, index)
             {
               if (element.lang == lang) {
@@ -70,7 +70,7 @@
         return function ()
         {
           let increase_doms = element_doms = document.querySelectorAll('[lang]:not(title)');
-          increase_doms.forEach(
+          pad(increase_doms).forEach(
             function (element, _index)
             {
               if (!elements.has(element)) {
@@ -84,7 +84,7 @@
             }
           );
           let decrease = new Map(elements);
-          increase_doms.forEach(
+          pad(increase_doms).forEach(
             function (element, _index)
             {
               if (decrease.has(element)) {
@@ -92,7 +92,7 @@
               }
             }
           );
-          decrease.forEach(
+          pad(decrease).forEach(
             function (element, _display) {
               if (elements.has(element)) {
                 elements.delete(element);

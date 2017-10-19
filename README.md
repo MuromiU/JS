@@ -9,6 +9,7 @@
 [/examples/languages.html](https://github.com/MuromiU/JS/blob/master/examples/languages.html)
 ``` html
 <html>
+  <meta charset="utf-8"/>
   <head>
     <title lang="en">Test Page</title>
     <title lang="zh-cmn-Hans">测试页面</title>
