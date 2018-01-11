@@ -23,9 +23,32 @@
   );
 }(function () {
   let multi_languages = new Multi_languages(); // capture on top
+
   let pad = function(x) {
     return Array.prototype.slice.call(x);
   }
+
+  let handleSelect = function (select, options, lang) {
+      return function (condition) {
+          pad(options).map(function (option, i) {
+              if (option.lang == lang && condition(option)) {
+                  select.selectedIndex = i;
+              }
+          });
+      }
+  }
+
+  let handleSelects = function (lang) {
+      pad(document.querySelectorAll('select')).map(function (select) {
+          var options = select.querySelectorAll('option');
+          var selectHandler = handleSelect(select, options, lang);
+          selectHandler(function (option) {return !!option.selected;});
+          if (pad(options).filter(function (option){return option.lang == lang;}).every(function (option) {return option.selected == false;})) {
+              selectHandler(function (option) {return !!option.getAttribute('selected');});
+          }
+      });
+  }
+
   function Multi_languages()
   // Let over Lambda over Let over Lambda
   {
@@ -64,6 +87,8 @@
             }
           );
           titles = document.querySelectorAll('title[lang]');
+          handleSelects(lang);
+
           active_lang = lang;
         };
       },
