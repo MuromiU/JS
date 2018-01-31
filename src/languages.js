@@ -38,12 +38,35 @@
       }
   }
 
-  let handleSelects = function (lang) {
-      pad(document.querySelectorAll('select')).map(function (select) {
-          var options = select.querySelectorAll('option');
-          var selectHandler = handleSelect(select, options, lang);
+  let resortSelect = function (select, lang) {
+      let store = [];
+      let options = select.querySelectorAll('option');
+      pad(options).map(function (option) {
+          store.push(option);
+      });
+      pad(options).map(function (option) {
+          select.removeChild(option);
+      });
+      store.filter(function (option) {return option.lang == lang;}).map(function (option) {
+          select.appendChild(option);
+      });
+      store.filter(function (option) {return option.lang != lang;}).map(function (option) {
+          select.appendChild(option);
+      });
+  }
+
+  let handleSelects = function (lang, active_lang) {
+      let selects = document.querySelectorAll('select');
+      pad(selects).map(function (select) {
+          if (lang != active_lang) {
+              resortSelect(select, lang);
+          }
+      });
+      pad(selects).map(function (select) {
+          let options = select.querySelectorAll('option');
+          let selectHandler = handleSelect(select, options, lang);
           selectHandler(function (option) {return !!option.selected;});
-          if (pad(options).filter(function (option){return option.lang == lang;}).every(function (option) {return option.selected == false;})) {
+          if (pad(options).filter(function (option) {return option.lang == lang;}).every(function (option) {return option.selected == false;})) {
               selectHandler(function (option) {return !!option.getAttribute('selected');});
           }
       });
@@ -87,7 +110,7 @@
             }
           );
           titles = document.querySelectorAll('title[lang]');
-          handleSelects(lang);
+          handleSelects(lang, active_lang);
 
           active_lang = lang;
         };
