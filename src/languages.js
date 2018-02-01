@@ -51,17 +51,21 @@
 
   let handleSelects = function (lang) {
       let selects = document.querySelectorAll('select');
+      let later = [];
       pad(selects).map(function (select) {
+          let oldValue = select.value;
           let options = select.querySelectorAll('option');
           let selectHandler = handleSelect(select, options, lang);
           selectHandler(function (option) {return !!option.selected;});
           if (pad(options).filter(function (option) {return option.lang == lang;}).every(function (option) {return option.selected == false;})) {
               selectHandler(function (option) {return !!option.getAttribute('selected');});
           }
+          later.push(function(){select.value = oldValue;});
       });
       pad(selects).map(function (select) {
           fakeSelect(select, lang);
       });
+      later.map(function(fn){fn()});
   }
 
   function Multi_languages()
