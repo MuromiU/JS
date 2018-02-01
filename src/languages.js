@@ -37,31 +37,20 @@
           });
       }
   }
-
-  let resortSelect = function (select, lang) {
-      let store = [];
+  let fakeCache = new Map();window.fakeCache = fakeCache;
+  let fakeSelect = function (select, lang) {
       let options = select.querySelectorAll('option');
-      pad(options).map(function (option) {
-          store.push(option);
+      pad(options).filter(function (option) {return option.lang == lang && option.lang != "";}).map(function (option) {
+          option.value = option.value || fakeCache.get(option) || "";
       });
-      pad(options).map(function (option) {
-          select.removeChild(option);
-      });
-      store.filter(function (option) {return option.lang == lang;}).map(function (option) {
-          select.appendChild(option);
-      });
-      store.filter(function (option) {return option.lang != lang;}).map(function (option) {
-          select.appendChild(option);
+      pad(options).filter(function (option) {return option.lang != lang && option.lang != "";}).map(function (option) {
+          fakeCache.set(option, fakeCache.get(option) || option.value || "");
+          option.value = "";
       });
   }
 
-  let handleSelects = function (lang, active_lang) {
+  let handleSelects = function (lang) {
       let selects = document.querySelectorAll('select');
-      pad(selects).map(function (select) {
-          if (lang != active_lang) {
-              resortSelect(select, lang);
-          }
-      });
       pad(selects).map(function (select) {
           let options = select.querySelectorAll('option');
           let selectHandler = handleSelect(select, options, lang);
@@ -69,6 +58,9 @@
           if (pad(options).filter(function (option) {return option.lang == lang;}).every(function (option) {return option.selected == false;})) {
               selectHandler(function (option) {return !!option.getAttribute('selected');});
           }
+      });
+      pad(selects).map(function (select) {
+          fakeSelect(select, lang);
       });
   }
 
@@ -110,7 +102,7 @@
             }
           );
           titles = document.querySelectorAll('title[lang]');
-          handleSelects(lang, active_lang);
+          handleSelects(lang);
 
           active_lang = lang;
         };
